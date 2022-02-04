@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import './interfaces/IBEP20.sol';
-import './interfaces/IDEXAVAXRouter.sol';
-import './interfaces/IDEXRouter.sol';
+import './IERC20.sol';
+import './IDEXAVAXRouter.sol';
+import './IDEXRouter.sol';
 
 contract DEXAVAXRouter is IDEXRouter {
   IDEXAVAXRouter private router;
@@ -41,7 +41,7 @@ contract DEXAVAXRouter is IDEXRouter {
       uint256 liquidity
     )
   {
-    IBEP20 t = IBEP20(token);
+    IERC20 t = IERC20(token);
     t.transferFrom(msg.sender, address(this), amountToken);
     t.approve(address(router), amountToken);
     return
@@ -62,7 +62,7 @@ contract DEXAVAXRouter is IDEXRouter {
     address to,
     uint256 deadline
   ) external override {
-    IBEP20 t = IBEP20(path[0]);
+    IERC20 t = IERC20(path[0]);
     t.transferFrom(msg.sender, address(this), amountIn);
     t.approve(address(router), amountIn);
     router.swapExactTokensForTokensSupportingFeeOnTransferTokens(
@@ -92,7 +92,7 @@ contract DEXAVAXRouter is IDEXRouter {
     address to,
     uint256 deadline
   ) external override {
-    IBEP20 t = IBEP20(path[0]);
+    IERC20 t = IERC20(path[0]);
     t.transferFrom(msg.sender, address(this), amountIn);
     t.approve(address(router), amountIn);
     router.swapExactTokensForAVAXSupportingFeeOnTransferTokens(
