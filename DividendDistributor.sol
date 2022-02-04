@@ -2,9 +2,9 @@
 pragma solidity ^0.8.4;
 
 import '@openzeppelin/contracts/utils/math/SafeMath.sol';
-import './interfaces/IBEP20.sol';
-import './interfaces/IDEXRouter.sol';
-import './interfaces/IDividendDistributor.sol';
+import './IERC20.sol';
+import './IDEXRouter.sol';
+import './IDividendDistributor.sol';
 
 contract DividendDistributor is IDividendDistributor {
   using SafeMath for uint256;
@@ -17,7 +17,7 @@ contract DividendDistributor is IDividendDistributor {
     uint256 totalRealised;
   }
 
-  IBEP20 EP;
+  IERC20 BoiPrint;
   address WAVAX;
   IDEXRouter router;
 
@@ -58,7 +58,7 @@ contract DividendDistributor is IDividendDistributor {
     router = IDEXRouter(_router);
     _token = msg.sender;
     WAVAX = _WETH;
-    EP = IBEP20(_printerToken);
+    BoiPrint = IERC20(_printerToken);
   }
 
   function setDistributionCriteria(uint256 _minPeriod, uint256 _minDistribution)
@@ -156,7 +156,7 @@ contract DividendDistributor is IDividendDistributor {
       if (compound && address(EP) != _token) {
         EP.approve(address(router), amount);
         address[] memory path = new address[](3);
-        path[0] = address(EP);
+        path[0] = address(BoiPrint);
         path[1] = WAVAX;
         path[2] = _token;
         router.swapExactTokensForTokensSupportingFeeOnTransferTokens(
