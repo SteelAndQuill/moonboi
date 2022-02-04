@@ -90,9 +90,9 @@ contract Moonboi is IERC20, Auth {
   uint256 feeDenominator = 10000;
 
   address public autoLiquidityReceiver =
-    // 0xB3F6120E4FC40C5aD0bA201A709B586910386F55; change to multisig code will be broken here for now
+     0x3e7A3cdCFbaa89401dE226a3e72805510b65eD30; //change to multisig code will be broken here for now
   address public marketingFeeReceiver =
-    // 0xB3F6120E4FC40C5aD0bA201A709B586910386F55; change to multisig code will be broken here for now
+     0x3e7A3cdCFbaa89401dE226a3e72805510b65eD30; //change to multisig code will be broken here for now
 
   uint256 targetLiquidity = 10;
   uint256 targetLiquidityDenominator = 100;
