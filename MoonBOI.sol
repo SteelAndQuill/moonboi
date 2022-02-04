@@ -25,6 +25,9 @@ import './Auth.sol';
 import './DividendDistributor.sol';
 import './DEXAVAXRouter.sol';
 
+/// @title The MoonBoi Variable Printer
+/// @author SteelAndQuill and fatal1ty.eth
+/// @notice This token routes 10% of transaction payments to existing holders in the form of BoiPrint, reserves 3% for protocol ops, and provides 3% as LP.
 contract Moonboi is IERC20, Auth {
   using SafeMath for uint256;
   
@@ -43,18 +46,18 @@ contract Moonboi is IERC20, Auth {
   bool isAVAX = true;
 
   // DEX router
-  // AVAX mainnet: 0x60aE616a2155Ee3d9A68541Ba4544862310933d4
-  // Rinkeby: 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
-  address constant ROUTER = 0x60aE616a2155Ee3d9A68541Ba4544862310933d4;
+  // AVAX mainnet: 0xb5b2444eDF79b00d40f463f79158D1187a0D0c25 Official Thorus.fi router
+  // Fuji testnet: 0xd62b35686CbdfF7fB067EAb403dE38702DB01fd8 SAQ-deployed clone of Thorus Router
+  address constant ROUTER = 0xd62b35686CbdfF7fB067EAb403dE38702DB01fd8;
 
   // "printer" token
-  // AVAX mainnet WETH: 0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB
-  // Rinkeby WETH: 0xc778417E063141139Fce010982780140Aa0cD5Ab
-  address EP = 0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB; // EP
+  // AVAX mainnet DAI.e: 0xd586e7f844cea2f87f50152665bcbc2c279d8d70
+  // Fuji SAQ MOJO: 0x2b7A4a839aB21bBd8bf158F52980a1e09024E9D2
+  address BoiPrint = 0x2b7A4a839aB21bBd8bf158F52980a1e09024E9D2; // BoiPrint
 
   // AVAX mainnet WAVAX: 0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7
-  // Rinkeby WETH: 0xc778417E063141139Fce010982780140Aa0cD5Ab
-  address public WAVAX = 0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7;
+  // Fuji testnet WAVAX: 0xd00ae08403B9bbb9124bB305C09058E32C39A48c
+  address public WAVAX = 0xd00ae08403B9bbb9124bB305C09058E32C39A48c;
   // ********************************************************************************
   // ********************************************************************************
 
@@ -66,8 +69,8 @@ contract Moonboi is IERC20, Auth {
   uint8 constant _decimals = 18;
 
   uint256 _totalSupply = 1_000_000_000_000_000 * (10**_decimals);
-  uint256 public _maxTxAmount = _totalSupply.div(40); // 2,5%
-  uint256 public _maxWallet = _totalSupply.div(40); // 2,5%
+  uint256 public _maxTxAmount = _totalSupply.div(40); // 2.5%
+  uint256 public _maxWallet = _totalSupply.div(40); // 2.5%
 
   mapping(address => uint256) _balances;
   mapping(address => mapping(address => uint256)) _allowances;
@@ -135,7 +138,7 @@ contract Moonboi is IERC20, Auth {
     _allowances[address(this)][ROUTER] = MAX;
     _allowances[address(this)][address(router)] = MAX;
     WAVAX = router.WETH();
-    distributor = new DividendDistributor(address(router), WAVAX, EP);
+    distributor = new DividendDistributor(address(router), WAVAX, BoiPrint);
     distributorAddress = address(distributor);
 
     isFeeExempt[msg.sender] = true;
